@@ -51,7 +51,8 @@
         .camera-overlay {
             position: absolute; bottom: 8px; left: 8px; right: 8px;
             background: rgba(0,0,0,0.6); padding: 4px 8px; border-radius: 4px;
-            font-size: 0.75rem; color: #fff; text-align: center; backdrop-filter: blur(4px);
+            font-size: 0.75rem; color: #fff; text-align: center; 
+            -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
             display: none;
         }
 
@@ -92,6 +93,9 @@
             background: transparent; color: #aaa; border: none; font-size: 0.85rem; cursor: pointer; padding: 4px 8px; border-radius: 4px;
         }
         .copy-btn:hover { color: #fff; background: #2a2a2a; }
+        .transcript-title { font-weight: 500; }
+        
+        #video-canvas { display: none; }
         
         .chat-history {
             flex: 1; padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px;
@@ -149,8 +153,8 @@
         <!-- Media Panel -->
         <div class="media-panel">
             <div class="camera-container">
-                <video id="video-feed" autoplay playsinline muted></video>
-                <canvas id="video-canvas" style="display:none;"></canvas>
+                <video id="video-feed" autoplay muted></video>
+                <canvas id="video-canvas"></canvas>
                 <div class="camera-overlay" id="camera-overlay">Camera active — sending every 2s</div>
             </div>
 
@@ -171,7 +175,7 @@
         <!-- Chat Panel -->
         <div class="chat-panel">
             <div class="chat-header">
-                <span style="font-weight: 500;">Conversation Transcript</span>
+                <span class="transcript-title">Conversation Transcript</span>
                 <button class="copy-btn" onclick="copyTranscript()">Copy transcript</button>
             </div>
             <div class="chat-history" id="chat-history">

@@ -45,7 +45,7 @@ PERSONA:
 
 root_agent = Agent(
     name="gemini_live_voice_vision_agent",
-    model="gemini-3.1-pro-preview",
+    model="gemini-2.0-flash-live-001",
     description="Real-time voice and vision agent with live search grounding",
     instruction=SYSTEM_INSTRUCTION,
     tools=[google_search],

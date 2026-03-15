@@ -18,6 +18,7 @@ from fastapi.responses import FileResponse
 from google.adk.runners import Runner
 from google.adk.sessions import InMemorySessionService
 from google.adk.agents.run_config import RunConfig, StreamingMode
+from google.adk.agents.live_request_queue import LiveRequestQueue
 from google.genai import types as genai_types
 
 from backend.agent import root_agent
@@ -83,11 +84,16 @@ async def websocket_endpoint(websocket: WebSocket):
     
     # Initialize ADK runner and session
     session_service = InMemorySessionService()
-    runner = Runner(agent=root_agent, session_service=session_service)
-    adk_session = session_service.create_session() # Use actual ADK session service API
-    
-    if asyncio.iscoroutine(adk_session):
-        adk_session = await adk_session
+    APP_NAME = "gemini_live_agent"
+    runner = Runner(
+        agent=root_agent,
+        app_name=APP_NAME,
+        session_service=session_service
+    )
+    adk_session = await session_service.create_session(
+        app_name=APP_NAME,
+        user_id=session_id
+    )
         
     await session_manager.create_session(session_id, runner, getattr(adk_session, 'id', str(id(adk_session))))
     
@@ -96,45 +102,39 @@ async def websocket_endpoint(websocket: WebSocket):
         streaming_mode=StreamingMode.BIDI
     )
 
-    # Use a queue to pipe incoming WebSocket messages to the ADK stream
-    input_queue = asyncio.Queue()
+    # LiveRequestQueue bridges WebSocket data into the ADK live stream
+    live_request_queue = LiveRequestQueue()
 
-    async def input_generator():
-        """Generator to yield inputs to ADK runner."""
-        while True:
-            item = await input_queue.get()
-            if item is None: # Sentinel value
-                break
-            yield item
 
     async def process_runner_output():
         """Receive chunks from ADK runner and forward them to the WebSocket."""
         try:
-            # Note: actual ADK APIs for streaming vary; we assume a streaming function that yields chunks
-            # based on user requirements. A common signature resembles builder patterns.
-            # Using stream method that takes session.id, input stream generator, and config.
-            async for chunk in runner.stream(session_id, input_generator(), config=run_config):
-                # 1. Audio check
-                if hasattr(chunk, 'audio_chunk') and chunk.audio_chunk:
-                    # Send binary PCM Int16 audio at 24kHz to client
-                    await websocket.send_bytes(chunk.audio_chunk)
-                    
-                # 2. Transcript check
-                if hasattr(chunk, 'text') and chunk.text:
-                    await websocket.send_json({
-                        "type": "transcript",
-                        "role": "agent",
-                        "text": chunk.text
-                    })
-                    
-                # 3. Status check (if supported)
-                if hasattr(chunk, 'status') and chunk.status:
-                    await websocket.send_json({
-                        "type": "status",
-                        "state": chunk.status
-                    })
-                    await session_manager.update_status(session_id, chunk.status)
-                    
+            async for event in runner.run_live(
+                user_id=session_id,
+                session_id=adk_session.id,
+                live_request_queue=live_request_queue,
+                run_config=run_config,
+            ):
+                # 1. Audio data
+                if (event.server_content and
+                        event.server_content.model_turn and
+                        event.server_content.model_turn.parts):
+                    for part in event.server_content.model_turn.parts:
+                        if hasattr(part, 'inline_data') and part.inline_data:
+                            if part.inline_data.mime_type.startswith('audio/'):
+                                await websocket.send_bytes(part.inline_data.data)
+                        if hasattr(part, 'text') and part.text:
+                            await websocket.send_json({
+                                "type": "transcript",
+                                "role": "agent",
+                                "text": part.text
+                            })
+
+                # 2. Turn complete signal
+                if event.server_content and event.server_content.turn_complete:
+                    await websocket.send_json({"type": "status", "state": "listening"})
+                    await session_manager.update_status(session_id, "listening")
+
         except asyncio.CancelledError:
             logger.info("Runner output loop cancelled.")
         except Exception as e:
@@ -161,7 +161,7 @@ async def websocket_endpoint(websocket: WebSocket):
                     data=pcm_bytes, 
                     mime_type="audio/pcm;rate=16000"
                 )
-                await input_queue.put(blob)
+                live_request_queue.send_realtime(blob)
 
             elif "text" in message:
                 try:
@@ -181,8 +181,7 @@ async def websocket_endpoint(websocket: WebSocket):
                                 data=img_bytes, 
                                 mime_type="image/jpeg"
                             )
-                            # Inject into live session context
-                            await input_queue.put(blob)
+                            live_request_queue.send_realtime(blob)
                     
                     elif msg_type == "text":
                         # JSON {type: "text", content: "..."} → typed text input
@@ -193,7 +192,7 @@ async def websocket_endpoint(websocket: WebSocket):
                                 "role": "user", 
                                 "text": content
                             })
-                            await input_queue.put(content)
+                            live_request_queue.send_realtime(genai_types.Blob(data=content.encode(), mime_type="text/plain"))
                             await session_manager.update_status(session_id, "listening")
                             
                     elif msg_type == "interrupt":
@@ -223,7 +222,7 @@ async def websocket_endpoint(websocket: WebSocket):
         logger.error(f"Unexpected WebSocket error: {e}")
     finally:
         # Session Cleanup
-        await input_queue.put(None)
+        live_request_queue.close()
         runner_task.cancel()
         
         await session_manager.close_session(session_id)

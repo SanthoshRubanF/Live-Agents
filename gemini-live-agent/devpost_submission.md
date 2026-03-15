@@ -1,20 +1,20 @@
-# Aria — Gemini Live Voice & Vision Agent
+# Pallavee — Gemini Live Voice & Vision Agent
 
 ## INSPIRATION
 Static chatbots operate on a fundamentally flawed premise: wait your turn, type your query, wait for a wall of text. Real human conversation doesn't work that way. It's messy, simultaneous, and relies heavily on shared visual context.
 
-The moment I realized how transformative it would be to combine ultra-low latency voice generation, instantaneous barge-in interruption handling, and active hardware-camera vision analysis into a single unified stream, the concept for Aria was born. I wanted to build an agent that felt less like a terminal prompt and more like a knowledgeable colleague actively sitting beside me.
+The moment I realized how transformative it would be to combine ultra-low latency voice generation, instantaneous barge-in interruption handling, and active hardware-camera vision analysis into a single unified stream, the concept for Pallavee was born. I wanted to build an agent that felt less like a terminal prompt and more like a knowledgeable colleague actively sitting beside me.
 
 ## WHAT IT DOES
-Aria is a real-time, bidirectional AI agent that fundamentally changes human-computer interaction through four core capabilities:
+Pallavee is a real-time, bidirectional AI agent that fundamentally changes human-computer interaction through four core capabilities:
 
 1. **Real-Time Voice:** Engages in natural, full-duplex conversational audio streaming with human-like latency.
 2. **Camera Vision:** "Sees" through the user's web camera, allowing physical objects and environments to be queried instantly without taking photos or uploading files.
-3. **Barge-in Interruption:** Listens concurrently while speaking. If the user interrupts, Aria instantly stops generating its current response and seamlessly pivots to the new context.
+3. **Barge-in Interruption:** Listens concurrently while speaking. If the user interrupts, Pallavee instantly stops generating its current response and seamlessly pivots to the new context.
 4. **Search Grounding:** By utilizing the Google Search Tool, the agent eliminates AI hallucination by querying live data before responding with factual answers.
 
 ## HOW I BUILT IT
-Aria’s core foundation was rapid-prototyped using the powerful **Google ADK (Agent Development Kit)**, which drastically simplified defining agent scopes, tool mounting, and session lifecycle management.
+Pallavee’s core foundation was rapid-prototyped using the powerful **Google ADK (Agent Development Kit)**, which drastically simplified defining agent scopes, tool mounting, and session lifecycle management.
 
 For the primary inferencing framework, I leveraged the bleeding-edge **Gemini Live API (`gemini-3.1-pro-preview`)**. By establishing a `StreamingMode.BIDI` (Bidirectional) context, the agent accepts raw bytes of audio and Base64 encoded JPEG vision data directly into its modality buffers while simultaneously streaming generated 24kHz PCM audio outward.
 

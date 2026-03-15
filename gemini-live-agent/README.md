@@ -1,4 +1,4 @@
-# Aria — Gemini Live Agent
+# Pallavee — Gemini Live Agent
 
 > A real-time AI assistant that sees through your camera, listens to your voice, handles interruptions, and never hallucinates.
 
@@ -7,8 +7,8 @@
 **Live Demo:** [Deploy to Google Cloud Run following the instructions below to get your live URL!]
 
 ## What it does
-- **Voice Interaction:** Engage in natural, full-duplex conversations. Aria understands vocal intent, responds within 1-2 seconds with high-quality synthesized speech, and gracefully handles rapid interruptions using Voice Activity Detection (VAD).
-- **Computer Vision:** Aria sees what you see. By securely streaming Base64-encoded camera frames via WebSockets, the agent dynamically analyzes physical environments and answers contextual visual queries in real-time.
+- **Voice Interaction:** Engage in natural, full-duplex conversations. Pallavee understands vocal intent, responds within 1-2 seconds with high-quality synthesized speech, and gracefully handles rapid interruptions using Voice Activity Detection (VAD).
+- **Computer Vision:** Pallavee sees what you see. By securely streaming Base64-encoded camera frames via WebSockets, the agent dynamically analyzes physical environments and answers contextual visual queries in real-time.
 - **Search Grounding:** Never worry about AI hallucinations. The agent relies heavily on the `google_search` tool through Google ADK to verify current facts before speaking, ensuring highly reliable, grounded responses.
 
 ## Architecture
@@ -48,7 +48,7 @@ On the backend, a `SessionManager` securely orchestrates Google ADK runners. The
    pip install -r backend/requirements.txt
    ```
 
-3. **Configure Environment Variables**
+3. **Configure Environment VPallaveebles**
    Update `backend/.env` with your Google credentials:
    ```env
    GOOGLE_API_KEY=your_genai_api_key_here
@@ -87,7 +87,7 @@ Execute the provided shell orchestrator:
 chmod +x deploy.sh
 ./deploy.sh
 ```
-*Behind the scenes, this creates the Docker repository `gemini-live-agent`, submits `cloudbuild.yaml` to Google Cloud Build, spins up an isolated Cloud Run revision, injects production environment variables, and spits out the public HTTPS URL.*
+*Behind the scenes, this creates the Docker repository `gemini-live-agent`, submits `cloudbuild.yaml` to Google Cloud Build, spins up an isolated Cloud Run revision, injects production environment vPallaveebles, and spits out the public HTTPS URL.*
 
 ## How to Test
 **Automated Local Testing:**
@@ -100,7 +100,7 @@ python backend/test_local.py
 1. Ping the health endpoint: `curl https://<YOUR-CLOUD-RUN-URL>/health`
 2. Open the main URL in any Chromium/Webkit browser: `https://<YOUR-CLOUD-RUN-URL>`
 3. Click "Start" -> allow Mic/Camera permissions. 
-4. Ask Aria a complex question about an active event (Testing ground search) or hold up a physical object to the camera and ask "What do you see?" (Testing Multi-Modal Vision).
+4. Ask Pallavee a complex question about an active event (Testing ground search) or hold up a physical object to the camera and ask "What do you see?" (Testing Multi-Modal Vision).
 
 ## Hackathon Notes
 - **Submitted to:** Gemini Live Agent Challenge (Devpost)

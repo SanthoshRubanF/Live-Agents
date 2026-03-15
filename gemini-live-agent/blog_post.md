@@ -1,4 +1,4 @@
-# How I built Aria: a real-time voice + vision AI agent with Google ADK and Gemini Live API
+# How I built Pallavee: a real-time voice + vision AI agent with Google ADK and Gemini Live API
 
 *By [Your Name]*
 
@@ -8,7 +8,7 @@ I created this content for the purposes of entering the Gemini Live Agent Challe
 
 Building a conversational AI used to mean stitching together brittle text-to-speech, disjointed LLM inference chains, and sluggish transcription APIs. The result? High latency, no situational context, and a complete inability to handle a simple human interruption. 
 
-For my submission to the Gemini Live Agent Challenge, I wanted to build something fundamentally different. I built **Aria**, an AI assistant that sees through your camera, listens to your voice, and handles interruptions naturally — all in real-time.
+For my submission to the Gemini Live Agent Challenge, I wanted to build something fundamentally different. I built **Pallavee**, an AI assistant that sees through your camera, listens to your voice, and handles interruptions naturally — all in real-time.
 
 Here is the technical architectural breakdown of how I made it happen.
 
@@ -33,9 +33,9 @@ Working with raw PCM Integer-16 audio across browser boundaries is notoriously d
 4. **Resampling and Playback:** When the frontend receives this binary response, it converts the Int16 bytes back to `Float32`, creates an `AudioBuffer` explicitly rated at 24kHz, and uses a custom queue scheduler to ensure gapless, uninterrupted playback.
 
 ## Implementing True Barge-In Interruption
-What happens if Aria is speaking, but the user suddenly changes their mind?
+What happens if Pallavee is speaking, but the user suddenly changes their mind?
 
-Because I run VAD locally on the client, the moment my RMS algorithm thresholds upward—even while Aria is mid-sentence—the client fires a strict `{type: "interrupt"}` JSON payload. My Python backend intercepts this, calls `runner.cancel_turn(session_id)` against the ADK, and instantly updates the status. Aria stops generating tokens immediately, drops her active context queue, and begins processing the user's new audio stream seamlessly. No glitching, no weird latency buffers. 
+Because I run VAD locally on the client, the moment my RMS algorithm thresholds upward—even while Pallavee is mid-sentence—the client fires a strict `{type: "interrupt"}` JSON payload. My Python backend intercepts this, calls `runner.cancel_turn(session_id)` against the ADK, and instantly updates the status. Pallavee stops generating tokens immediately, drops her active context queue, and begins processing the user's new audio stream seamlessly. No glitching, no weird latency buffers. 
 
 ## Cloud Run Deployment Tips for Long-Lived WebSockets
 Deploying this pipeline to Google Cloud Run required tuning a few critical settings:

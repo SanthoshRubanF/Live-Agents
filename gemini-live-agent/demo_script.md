@@ -1,4 +1,4 @@
-# Aria — Gemini Live Agent
+# Pallavee — Gemini Live Agent
 ### 4-Minute Devpost Demo Script
 
 ---
@@ -14,27 +14,27 @@ Open a traditional chatbot interface (like standard ChatGPT/Gemini). Type a ques
 **[0:25–0:50] INTRODUCTION & SETUP**
 
 **SCREEN ACTION:**
-Cut to a fresh browser tab opening the "Aria" Live Agent UI. 
+Cut to a fresh browser tab opening the "Pallavee" Live Agent UI. 
 The mouse clicks **[▶ Start]**. 
 The status indicator in the top right flashes "Connecting" and then snaps to a bright green **"● Live"**. 
 The user speaks directly into the microphone without clicking anything else.
 
 **NARRATION:**
-"Meet Aria. Built for the Gemini Live Agent Challenge. She isn’t waiting for a text payload. She’s listening right now. Always on. Always ready."
+"Meet Pallavee. Built for the Gemini Live Agent Challenge. She isn’t waiting for a text payload. She’s listening right now. Always on. Always ready."
 
 ---
 **[0:50–1:40] VOICE DEMO & BARGE-IN**
 
 **SCREEN ACTION:**
-- **User speaks:** "Hey Aria, what's the current weather like in Chennai?"
+- **User speaks:** "Hey Pallavee, what's the current weather like in Chennai?"
 - **UI:** The agent state immediately switches to `Thinking...` and less than a second later, the waveform visualizer starts bouncing rhythmically. 
-- **Aria speaks (synthesized audio):** "Right now, Chennai is experiencing partly cloudy skies with temperatures around 32 degrees Celsius, and high humidity..."
+- **Pallavee speaks (synthesized audio):** "Right now, Chennai is experiencing partly cloudy skies with temperatures around 32 degrees Celsius, and high humidity..."
 - **User INTERRUPTS (mid-sentence):** "Wait — what about Mumbai?"
 - **UI:** The waveform *instantly* drops flat. The state snaps back to `Listening`.
-- **Aria speaks (instantly pivoting):** "Oh, sure! In Mumbai, it's currently sunny and about 30 degrees..."
+- **Pallavee speaks (instantly pivoting):** "Oh, sure! In Mumbai, it's currently sunny and about 30 degrees..."
 
 **NARRATION:**
-"With Aria, there’s zero latency friction. Notice how fast she responds? Less than half a second. And the best part? She doesn't need you to politely wait your turn. If she's talking, just interrupt her. Thanks to robust Web Audio API handling, she drops what she's doing and pivots instantly, exactly like a real human conversation."
+"With Pallavee, there’s zero latency friction. Notice how fast she responds? Less than half a second. And the best part? She doesn't need you to politely wait your turn. If she's talking, just interrupt her. Thanks to robust Web Audio API handling, she drops what she's doing and pivots instantly, exactly like a real human conversation."
 
 ---
 **[1:40–2:30] VISION & GROUNDING**
@@ -42,14 +42,14 @@ The user speaks directly into the microphone without clicking anything else.
 **SCREEN ACTION:**
 - **User clicks:** **[📷 Camera On]**. The 240x180 live feed appears on the left.
 - **User holds up an object:** (e.g., a physical book, a specific laptop, or a coffee cup).
-- **User speaks:** "Aria, what is this? Tell me something interesting about it."
-- **Aria speaks:** "I see you're holding a MacBook Pro with the M3 chip. Those were announced in late 2023..."
+- **User speaks:** "Pallavee, what is this? Tell me something interesting about it."
+- **Pallavee speaks:** "I see you're holding a MacBook Pro with the M3 chip. Those were announced in late 2023..."
 - **User follows up:** "Oh wow. Should I buy a newer version right now?"
 - **UI:** Briefly shows the `Thinking` state as the backend hits the Google Search tool.
-- **Aria speaks:** "According to a search I just ran, Apple recently announced the new M4 MacBook Pros last week. If you value the latest performance jump, you might want to consider the newer model."
+- **Pallavee speaks:** "According to a search I just ran, Apple recently announced the new M4 MacBook Pros last week. If you value the latest performance jump, you might want to consider the newer model."
 
 **NARRATION:**
-"But Aria isn't just a voice. She's got eyes. By streaming low-latency camera frames straight to the Gemini Live API, she literally sees what you see. And when you ask her for advice? She never hallucinates. Using Google ADK tool mounting, she actively searches the live web for up-to-date facts before saying a single word."
+"But Pallavee isn't just a voice. She's got eyes. By streaming low-latency camera frames straight to the Gemini Live API, she literally sees what you see. And when you ask her for advice? She never hallucinates. Using Google ADK tool mounting, she actively searches the live web for up-to-date facts before saying a single word."
 
 ---
 **[2:30–3:15] ARCHITECTURE**
@@ -80,9 +80,9 @@ Show a waterfall of live JSON streaming logs from the session that was just reco
 **SCREEN ACTION:**
 Fade to a dark, sleek title card.
 Text on screen:
-**Aria — Gemini Live Agent**
+**Pallavee — Gemini Live Agent**
 **GitHub:** github.com/your-username/gemini-live-agent
 **Live:** gemini-live-agent-xyz.a.run.app 
 
 **NARRATION:**
-"Aria. Built exclusively for the Gemini Live Agent Challenge. Try it yourself using the repo link below. Because this is exactly what AI conversation should feel like. Thank you."
+"Pallavee. Built exclusively for the Gemini Live Agent Challenge. Try it yourself using the repo link below. Because this is exactly what AI conversation should feel like. Thank you."

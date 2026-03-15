@@ -58,7 +58,7 @@ async def test_text_turn():
     try:
         async with websockets.connect(WS_URL) as websocket:
             # Send text
-            req = {"type": "text", "content": "Hello Aria, what is 2 + 2?"}
+            req = {"type": "text", "content": "Hello Pallavee, what is 2 + 2?"}
             print(f"Sending: {req}")
             await websocket.send(json.dumps(req))
             

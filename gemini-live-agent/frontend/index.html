@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aria — Gemini Live Agent</title>
+    <title>Pallavee — Gemini Live Agent</title>
     <style>
         /* STYLING */
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -139,7 +139,7 @@
 <body>
 
     <header>
-        <div class="header-title">ARIA — Gemini Live Agent</div>
+        <div class="header-title">Pallavee — Gemini Live Agent</div>
         <div class="status-container">
             <div class="status-badge" id="conn-status">
                 <div class="status-dot" id="conn-dot"></div>
@@ -624,7 +624,7 @@
             row.className = `message-row ${role === 'user' ? 'user' : 'agent'}`;
             
             const time = new Date().toLocaleTimeString([], { hour12: false });
-            const titleStr = role === 'user' ? 'You' : (role === 'agent' ? 'Aria' : 'System');
+            const titleStr = role === 'user' ? 'You' : (role === 'agent' ? 'Pallavee' : 'System');
             
             // if it's an error/system msg, adjust style inline
             const bubbleStyle = role === 'system' ? 'background: #ea4335;' : '';

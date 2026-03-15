@@ -281,12 +281,15 @@
             if (socket) return;
             updateStatus('Connecting');
             
-            // Build WS URL
-            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-            // Default to localhost for dev, or current host if deployed
-            const host = window.location.hostname || 'localhost';
-            const port = window.location.port ? `:${window.location.port}` : ':8000';
-            const wsUrl = `${protocol}//${host}${port}/ws`;
+            // Build WS URL — use Cloud Run PROD URL or fallback to localhost
+            const CLOUD_RUN_URL = 'gemini-live-agent-2320255921.us-central1.run.app';
+            const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            let wsUrl;
+            if (isLocal) {
+                wsUrl = `ws://localhost:${window.location.port || 8000}/ws`;
+            } else {
+                wsUrl = `wss://${CLOUD_RUN_URL}/ws`;
+            }
             
             socket = new WebSocket(wsUrl);
             // We want binary data as ArrayBuffer

@@ -3,9 +3,9 @@ WORKDIR /app
 COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY backend/ /app/backend/
+COPY frontend/ /app/frontend/
 EXPOSE 8080
 ENV PORT=8080
-# Set pythonpath so root folder behaves exactly like local execution
 ENV PYTHONPATH=/app
 CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8080", \
      "--workers", "1", "--log-level", "info"]

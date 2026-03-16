@@ -115,11 +115,9 @@ async def websocket_endpoint(websocket: WebSocket):
                 live_request_queue=live_request_queue,
                 run_config=run_config,
             ):
-                # 1. Audio data
-                if (event.server_content and
-                        event.server_content.model_turn and
-                        event.server_content.model_turn.parts):
-                    for part in event.server_content.model_turn.parts:
+                # 1. Audio and Text data
+                if event.content and event.content.parts:
+                    for part in event.content.parts:
                         if hasattr(part, 'inline_data') and part.inline_data:
                             if part.inline_data.mime_type.startswith('audio/'):
                                 await websocket.send_bytes(part.inline_data.data)
@@ -131,7 +129,8 @@ async def websocket_endpoint(websocket: WebSocket):
                             })
 
                 # 2. Turn complete signal
-                if event.server_content and event.server_content.turn_complete:
+                # If ADK marks this as final response or we want to reset UI
+                if hasattr(event, 'is_final_response') and event.is_final_response():
                     await websocket.send_json({"type": "status", "state": "listening"})
                     await session_manager.update_status(session_id, "listening")
 

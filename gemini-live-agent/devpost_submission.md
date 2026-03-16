@@ -16,7 +16,7 @@ Pallavee is a real-time, bidirectional AI agent that fundamentally changes human
 ## HOW I BUILT IT
 Pallavee’s core foundation was rapid-prototyped using the powerful **Google ADK (Agent Development Kit)**, which drastically simplified defining agent scopes, tool mounting, and session lifecycle management.
 
-For the primary inferencing framework, I leveraged the bleeding-edge **Gemini Live API (`gemini-3.1-pro-preview`)**. By establishing a `StreamingMode.BIDI` (Bidirectional) context, the agent accepts raw bytes of audio and Base64 encoded JPEG vision data directly into its modality buffers while simultaneously streaming generated 24kHz PCM audio outward.
+For the primary inferencing framework, I leveraged the bleeding-edge **Gemini Live API (`gemini-2.5-flash-native-audio-latest`)**. By establishing a `StreamingMode.BIDI` (Bidirectional) context, the agent accepts raw bytes of audio and Base64 encoded JPEG vision data directly into its modality buffers while simultaneously streaming generated 24kHz PCM audio outward.
 
 To handle this massive real-time data flow, the backend was built on **FastAPI and WebSockets**. The Python server manages persistent asynchronous connections with the client. On the frontend, a vanilla JavaScript client uses the **Web Audio API** and an advanced `ScriptProcessorNode` to capture raw 16kHz microphone logic, calculate RMS (Root Mean Square) for local Voice Activity Detection (VAD), and transmit zero-gap PCM data to the server.
 
@@ -29,6 +29,7 @@ The entire backend pipeline is containerized using **Docker** and built through 
 ## ACCOMPLISHMENTS
 - Achieved sub-500ms voice response latency using bare-metal PCM transfers over wss:// protocols.
 - Built a highly resilient frontend canvas-stealing loop for invisible, clean camera context injection.
+- Implemented robust server-side transcript echoing and deduplication to ensure a perfectly synced, clean UI.
 - Reached zero hallucinations during factual queries explicitly through the robust ADK Google Search integration.
 
 ## WHAT I LEARNED

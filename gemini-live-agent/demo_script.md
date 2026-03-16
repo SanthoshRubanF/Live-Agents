@@ -60,7 +60,7 @@ Highlight the *Browser* box. Then draw a line to *Cloud Run*. Then to *Vertex AI
 Zoom in on the `Bidi stream (audio + vision)` arrow.
 
 **NARRATION:**
-"So, how does it work under the hood? It’s a beautifully orchestrated pipeline. The browser captures raw 16kHz PCM audio and Base64 vision frames, firing them through a persistent WebSocket. Our Python FastAPI backend manages the session using Google ADK. That backend hooks directly into Vertex AI's Gemini 2.5 Flash streaming endpoint, synthesizing audio on the fly and piping it straight back to the user."
+"So, how does it work under the hood? It’s a beautifully orchestrated pipeline. The browser captures raw 16kHz PCM audio and Base64 vision frames, firing them through a persistent WebSocket. Our Python FastAPI backend manages the session using Google ADK. That backend hooks directly into Vertex AI's Gemini 3.1 Pro streaming endpoint, synthesizing audio on the fly and piping it straight back to the user." 
 
 ---
 **[3:15–3:45] CLOUD DEPLOYMENT PROOF**

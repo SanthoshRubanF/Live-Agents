@@ -94,12 +94,7 @@ resource "google_cloud_run_v2_service" "agent_service" {
 
       env {
         name  = "GOOGLE_GENAI_USE_VERTEXAI"
-        value = "FALSE"
-      }
-      
-      env {
-        name  = "GOOGLE_API_KEY"
-        value = "AIzaSyBfkkYMRFpDcUYTl2sivsGPCofcy6SlUKA"
+        value = "TRUE"
       }
       
       env {

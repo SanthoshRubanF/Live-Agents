@@ -13,7 +13,7 @@ For my submission to the Gemini Live Agent Challenge, I wanted to build somethin
 Here is the technical architectural breakdown of how I made it happen.
 
 ## Why I chose Google ADK over raw WebSockets
-When working with the shiny new Gemini Live API (`gemini-2.5-flash-native-audio-latest`), it’s tempting to immediately write raw WebSockets and manually construct the complex JSON-serialized Protobuf arrays the Generative AI Python SDK expects.
+When working with the shiny new Gemini Live API (`gemini-3.1-pro-preview`), it’s tempting to immediately write raw WebSockets and manually construct the complex JSON-serialized Protobuf arrays the Generative AI Python SDK expects. 
 
 I quickly realized that doing so meant reinventing the wheel. 
 
@@ -41,9 +41,10 @@ Because I run VAD locally on the client, the moment my RMS algorithm thresholds 
 Deploying this pipeline to Google Cloud Run required tuning a few critical settings:
 - **Timeouts:** Cloud Run limits requests by default to 5 minutes. WebSocket streaming often exceeds this; defining `--timeout=3600` in your `gcloud run deploy` command is essential.
 - **Workers:** WebSockets hold persistent HTTP threads. I configured my container to strictly run exactly 1 Uvicorn worker per instance (`--workers 1`) but relied on Cloud Run's native autoscaling (`--max-instances 10`) to explicitly scale out horizontally as new user sessions arrived.
-- **Vertex AI:** While local API keys work for rapid prototyping, switching `GOOGLE_GENAI_USE_VERTEXAI=TRUE` ensures I’m utilizing my secured Google Cloud project structure and IAM bindings when fully deployed in production with `gemini-2.5-flash-native-audio-latest`.
+- **Vertex AI:** While local API keys work for rapid prototyping, switching `GOOGLE_GENAI_USE_VERTEXAI=TRUE` ensures I’m utilizing my secured Google Cloud project structure and IAM bindings when fully deployed in production.
 
-The sheer speed. When utilizing the optimal PCM pipelines without overhead, the Gemini Live API consistently returned synthesized conversational tokens with *sub-500ms* real-world latency. With the new server-side deduplication and explicit role mapping, the chat transcript is now as fluid and clean as the voice itself. It finally feels like speaking to a person, not a prompt box.
+## What Surprised Me
+The sheer speed. When utilizing the optimal PCM pipelines without overhead, the Gemini Live API consistently returned synthesized conversational tokens with *sub-500ms* real-world latency. It finally feels like speaking to a person, not a prompt box.
 
 ---
 

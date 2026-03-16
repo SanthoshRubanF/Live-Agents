@@ -118,15 +118,36 @@ async def websocket_endpoint(websocket: WebSocket):
                 # 1. Audio and Text data
                 content = getattr(event, 'server_content', None) or getattr(event, 'content', None)
                 if content and content.parts:
+                    role = getattr(content, 'role', 'agent')
+                    # Map 'model' to 'agent' for internal ADK/GenAI consistency if needed
+                    if role == 'model':
+                        role = 'agent'
+                        
                     for part in content.parts:
                         if hasattr(part, 'inline_data') and part.inline_data:
                             if part.inline_data.mime_type.startswith('audio/'):
                                 await websocket.send_bytes(part.inline_data.data)
+                        
                         if hasattr(part, 'text') and part.text:
+                            text = part.text.strip()
+                            if not text:
+                                continue
+                                
+                            # Simple deduplication: don't send the exact same text twice in a row for this session
+                            # Unless it's significantly different or we have a new turn
+                            # We'll use a local session variable for this
+                            if not hasattr(process_runner_output, 'last_texts'):
+                                process_runner_output.last_texts = {}
+                            
+                            if process_runner_output.last_texts.get(session_id) == text:
+                                continue
+                                
+                            process_runner_output.last_texts[session_id] = text
+                            
                             await websocket.send_json({
                                 "type": "transcript",
-                                "role": "agent",
-                                "text": part.text
+                                "role": role,
+                                "text": text
                             })
 
                 # 2. Turn complete signal

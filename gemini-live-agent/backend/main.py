@@ -67,7 +67,7 @@ async def health_check():
     
     return {
         "status": "ok", 
-        "model": "gemini-2.0-flash-exp", 
+        "model": "gemini-2.5-flash-native-audio-latest", 
         "version": "1.0.0",
         "sessions": stats
     }

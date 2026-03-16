@@ -48,5 +48,5 @@ root_agent = Agent(
     model="gemini-2.5-flash-native-audio-latest",
     description="Real-time voice and vision agent with live search grounding",
     instruction=SYSTEM_INSTRUCTION,
-    # tools=[google_search],
+    tools=[google_search],
 )

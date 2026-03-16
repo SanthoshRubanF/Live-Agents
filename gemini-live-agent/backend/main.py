@@ -98,7 +98,7 @@ async def websocket_endpoint(websocket: WebSocket):
     await session_manager.create_session(session_id, runner, getattr(adk_session, 'id', str(id(adk_session))))
     
     run_config = RunConfig(
-        response_modalities=["AUDIO"],
+        response_modalities=["audio"],
         streaming_mode=StreamingMode.BIDI
     )
 
@@ -186,12 +186,12 @@ async def websocket_endpoint(websocket: WebSocket):
                         # JSON {type: "text", content: "..."} → typed text input
                         content = data.get("content", "")
                         if content:
-                            await websocket.send_json({
-                                "type": "transcript", 
-                                "role": "user", 
-                                "text": content
-                            })
-                            live_request_queue.send_realtime(genai_types.Blob(data=content.encode(), mime_type="text/plain"))
+                            # Use send_content for text instead of send_realtime blob
+                            content = genai_types.Content(
+                                parts=[genai_types.Part(text=content)],
+                                role="user"
+                            )
+                            live_request_queue.send_content(content)
                             await session_manager.update_status(session_id, "listening")
                             
                     elif msg_type == "interrupt":

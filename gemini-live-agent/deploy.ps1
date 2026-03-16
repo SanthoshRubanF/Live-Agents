@@ -10,7 +10,7 @@ gcloud services enable run.googleapis.com aiplatform.googleapis.com cloudbuild.g
 gcloud artifacts repositories create $REPO_NAME --repository-format=docker --location=$REGION --project=$PROJECT_ID --quiet 2>$null
 gcloud auth configure-docker "$REGION-docker.pkg.dev" --quiet
 gcloud builds submit . --tag $IMAGE --project=$PROJECT_ID --quiet
-gcloud run deploy $SERVICE_NAME --image $IMAGE --platform managed --region $REGION --allow-unauthenticated --memory 1Gi --cpu 1 --timeout 3600 --min-instances 0 --max-instances 10 --set-env-vars "GOOGLE_GENAI_USE_VERTEXAI=TRUE,GOOGLE_CLOUD_PROJECT=$PROJECT_ID,GOOGLE_CLOUD_LOCATION=$REGION" --project=$PROJECT_ID --quiet
+gcloud run deploy $SERVICE_NAME --image $IMAGE --platform managed --region $REGION --allow-unauthenticated --memory 1Gi --cpu 1 --timeout 3600 --min-instances 0 --max-instances 10 --set-env-vars "GOOGLE_GENAI_USE_VERTEXAI=FALSE,GOOGLE_API_KEY=AIzaSyAdGmjF-GB4uxrYOdWfFR9B_vy4dK-ASjA,GOOGLE_CLOUD_PROJECT=$PROJECT_ID,GOOGLE_CLOUD_LOCATION=$REGION" --project=$PROJECT_ID --quiet
 
 $SERVICE_URL = gcloud run services describe $SERVICE_NAME --region $REGION --format "value(status.url)" --project=$PROJECT_ID
 Write-Host ""

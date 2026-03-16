@@ -687,8 +687,7 @@
                 content: text
             }));
             
-            // Append user message locally immediately — backend does not echo user text back
-            addMessageToTranscript('user', text);
+            // Note: backend now echoes the message back to transcript area
             
             els.textInput.value = "";
             els.textInput.disabled = false;

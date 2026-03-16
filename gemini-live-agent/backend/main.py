@@ -185,15 +185,24 @@ async def websocket_endpoint(websocket: WebSocket):
                     
                     elif msg_type == "text":
                         # JSON {type: "text", content: "..."} → typed text input
-                        content = data.get("content", "")
-                        if content:
-                            # Use send_content for text instead of send_realtime blob
+                        content_text = data.get("content", "")
+                        if content_text:
+                            # 1. Echo user text back to transcript
+                            await websocket.send_json({
+                                "type": "transcript",
+                                "role": "user",
+                                "text": content_text
+                            })
+                            # 2. Update status to thinking
+                            await websocket.send_json({"type": "status", "state": "thinking"})
+                            
+                            # 3. Send to ADK runner
                             content = genai_types.Content(
-                                parts=[genai_types.Part(text=content)],
+                                parts=[genai_types.Part(text=content_text)],
                                 role="user"
                             )
                             live_request_queue.send_content(content)
-                            await session_manager.update_status(session_id, "listening")
+                            await session_manager.update_status(session_id, "thinking")
                             
                     elif msg_type == "interrupt":
                         # User is speaking, stop agent

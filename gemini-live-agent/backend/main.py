@@ -116,8 +116,9 @@ async def websocket_endpoint(websocket: WebSocket):
                 run_config=run_config,
             ):
                 # 1. Audio and Text data
-                if event.content and event.content.parts:
-                    for part in event.content.parts:
+                content = getattr(event, 'server_content', None) or getattr(event, 'content', None)
+                if content and content.parts:
+                    for part in content.parts:
                         if hasattr(part, 'inline_data') and part.inline_data:
                             if part.inline_data.mime_type.startswith('audio/'):
                                 await websocket.send_bytes(part.inline_data.data)

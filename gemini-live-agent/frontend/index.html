@@ -687,10 +687,8 @@
                 content: text
             }));
             
-            // Append locally immediately for better UX
-            // (Wait, main.py sends a transcript event for user Text, so we don't need to duplicate it.
-            // Oh wait, main.py sends: {"type": "transcript", "role": "user", "text": content}
-            // Let's rely on server echo so it stays ordered)
+            // Append user message locally immediately — backend does not echo user text back
+            addMessageToTranscript('user', text);
             
             els.textInput.value = "";
             els.textInput.disabled = false;
